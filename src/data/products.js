@@ -12,8 +12,7 @@ exports.products = [
         gallery: [
             "/images/products/chair-1/1.jpg",
             "/images/products/chair-1/2.jpg",
-            "/images/products/chair-1/3.jpg",
-            "/images/products/chair-1/4.jpg"
+            "/images/products/chair-1/3.jpg"
         ]
     },
     {
@@ -23,11 +22,7 @@ exports.products = [
         price: 89.99,
         imageUrl: "/images/products/lamp-1/thumbnail.jpg",
         category: "Lighting",
-        gallery: [
-            "/images/products/lamp-1/1.jpg",
-            "/images/products/lamp-1/2.jpg",
-            "/images/products/lamp-1/3.jpg"
-        ]
+        gallery: []
     },
     {
         id: 3,
