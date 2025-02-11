@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "tsc"
+    "build": "rm -rf dist && mkdir dist && tsc && npm run copy-static",
+    "copy-static": "cp -r public/* dist/"
   },
   "keywords": [],
   "author": "",
