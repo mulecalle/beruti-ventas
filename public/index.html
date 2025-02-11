@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beruti Ventas - Marketplace</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Title Section -->
+        <section class="title-section">
+            <h1>Welcome to Beruti Ventas</h1>
+        </section>
+
+        <div class="main-content">
+            <section class="description-section">
+                <p>Discover our exclusive marketplace where quality meets convenience. Browse through our carefully curated collection of products and find exactly what you're looking for.</p>
+            </section>
+
+            <section class="gallery-section">
+                <div class="gallery-grid">
+                    <!-- Example gallery items - Replace src with your actual images -->
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 1">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 2">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 3">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 4">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 5">
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://via.placeholder.com/300" alt="Product 6">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Add this modal HTML just before closing body tag -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-gallery">
+                <div class="main-image">
+                    <img id="modalMainImage" src="" alt="">
+                    <button class="nav-btn prev">&#10094;</button>
+                    <button class="nav-btn next">&#10095;</button>
+                    <div class="keyboard-nav-hint">Use ← → arrow keys to navigate</div>
+                </div>
+                <div class="thumbnail-container"></div>
+            </div>
+            <div class="modal-info">
+                <h2 id="modalTitle"></h2>
+                <p id="modalDescription"></p>
+                <p id="modalPrice"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProduct = null;
+        let currentImageIndex = 0;
+
+        function openModal(product) {
+            currentProduct = product;
+            currentImageIndex = 0;
+            
+            const modal = document.getElementById('productModal');
+            const mainImage = document.getElementById('modalMainImage');
+            const title = document.getElementById('modalTitle');
+            const description = document.getElementById('modalDescription');
+            const price = document.getElementById('modalPrice');
+            const thumbnailContainer = document.querySelector('.thumbnail-container');
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const keyboardHint = document.querySelector('.keyboard-nav-hint');
+            
+            // Set main content
+            title.textContent = product.name;
+            description.textContent = product.description;
+            price.textContent = `$${product.price.toFixed(2)}`;
+            
+            // Check if gallery exists and has images
+            if (product.gallery && product.gallery.length > 0) {
+                mainImage.src = product.gallery[0];
+                
+                // Show navigation elements
+                thumbnailContainer.style.display = 'flex';
+                navButtons.forEach(btn => btn.style.display = 'block');
+                if (keyboardHint) keyboardHint.style.display = 'block';
+                
+                // Create thumbnails
+                thumbnailContainer.innerHTML = product.gallery
+                    .map((img, index) => `
+                        <img src="${img}" 
+                             class="thumbnail ${index === 0 ? 'active' : ''}" 
+                             onclick="changeImage(${index})"
+                             alt="Thumbnail ${index + 1}"
+                        >
+                    `).join('');
+            } else {
+                // Use single imageUrl and hide navigation elements
+                mainImage.src = product.imageUrl;
+                thumbnailContainer.style.display = 'none';
+                navButtons.forEach(btn => btn.style.display = 'none');
+                if (keyboardHint) keyboardHint.style.display = 'none';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function navigateImage(direction) {
+            if (!currentProduct || !currentProduct.gallery || currentProduct.gallery.length <= 1) return;
+            
+            const newIndex = (currentImageIndex + direction + currentProduct.gallery.length) % currentProduct.gallery.length;
+            changeImage(newIndex);
+        }
+
+        function changeImage(index) {
+            if (!currentProduct || !currentProduct.gallery || !currentProduct.gallery[index]) return;
+            
+            currentImageIndex = index;
+            const mainImage = document.getElementById('modalMainImage');
+            mainImage.src = currentProduct.gallery[index];
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // Fix the product fetch and click handler
+        fetch('/api/products')
+            .then(response => response.json())
+            .then(products => {
+                const galleryGrid = document.querySelector('.gallery-grid');
+                galleryGrid.innerHTML = products.map(product => `
+                    <div class="gallery-item" onclick="handleProductClick(${product.id})">
+                        <img src="${product.imageUrl}" alt="${product.name}">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <p class="price">$${product.price.toFixed(2)}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Store products in window for access
+                window.productsList = products;
+            })
+            .catch(error => console.error('Error loading products:', error));
+
+        // Add new function to handle product clicks
+        function handleProductClick(productId) {
+            const product = window.productsList.find(p => p.id === productId);
+            if (product) {
+                openModal(product);
+            }
+        }
+
+        // Move these event listeners inside the DOMContentLoaded event
+        document.addEventListener('DOMContentLoaded', () => {
+            // Debug log to verify the close button exists
+            console.log('Close button:', document.querySelector('.close'));
+
+            // Close with X button - updated with direct onclick
+            const closeBtn = document.querySelector('.close');
+            if (closeBtn) {
+                // Using both methods to ensure it works
+                closeBtn.onclick = function() {
+                    document.getElementById('productModal').style.display = 'none';
+                };
+                
+                closeBtn.addEventListener('click', function() {
+                    document.getElementById('productModal').style.display = 'none';
+                });
+            }
+
+            // Close with ESC key
+            document.addEventListener('keydown', (event) => {
+                const modal = document.getElementById('productModal');
+                // Only handle keyboard navigation if modal is visible
+                if (modal && modal.style.display === 'block') {
+                    switch(event.key) {
+                        case 'Escape':
+                            modal.style.display = 'none';
+                            break;
+                        case 'ArrowLeft':
+                            navigateImage(-1);
+                            break;
+                        case 'ArrowRight':
+                            navigateImage(1);
+                            break;
+                    }
+                }
+            });
+
+            // Close by clicking outside
+            window.addEventListener('click', (event) => {
+                const modal = document.getElementById('productModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', (event) => {
+                const modal = document.getElementById('productModal');
+                if (modal && modal.style.display === 'block') {
+                    if (event.key === 'Escape') {
+                        modal.style.display = 'none';
+                    } else if (currentProduct && currentProduct.gallery && currentProduct.gallery.length > 1) {
+                        if (event.key === 'ArrowLeft') {
+                            navigateImage(-1);
+                        } else if (event.key === 'ArrowRight') {
+                            navigateImage(1);
+                        }
+                    }
+                }
+            });
+        });
+
+        // Backup close button handler at global scope
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+
+        // Add navigation button handlers
+        document.querySelector('.prev').onclick = () => navigateImage(-1);
+        document.querySelector('.next').onclick = () => navigateImage(1);
+
+        // Add transition style to the main image
+        document.querySelector('.main-image img').style.transition = 'opacity 0.15s ease-in-out';
+    </script>
+</body>
+</html> 
