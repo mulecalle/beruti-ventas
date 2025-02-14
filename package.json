@@ -5,9 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "open src/index.html"
+    "start": "nodemon --watch src -e html,css,js,json --exec 'npx http-server src -o -p 8080'",
+    "serve": "npx http-server src -o -p 8080"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "nodemon": "^3.0.3"
+  }
 }

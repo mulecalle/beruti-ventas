@@ -15,58 +15,36 @@
 
         <div class="main-content">
             <section class="description-section">
-                <p>Discover our exclusive marketplace where quality meets convenience. Browse through our carefully curated collection of products and find exactly what you're looking for.</p>
+                <p>Discover our exclusive marketplace where quality meets convenience.</p>
             </section>
 
             <section class="gallery-section">
                 <div class="gallery-grid">
-                    <!-- Example gallery items - Replace src with your actual images -->
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 1">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 2">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 3">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 4">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 5">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://via.placeholder.com/300" alt="Product 6">
-                    </div>
+                    <!-- Products will be loaded here by JavaScript -->
                 </div>
             </section>
         </div>
     </div>
 
-    <!-- Add this modal HTML just before closing body tag -->
+    <!-- Modal Structure -->
     <div id="productModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close">&times;</span>
             <div class="modal-gallery">
                 <div class="main-image">
-                    <img id="modalMainImage" src="" alt="">
+                    <img id="modalMainImage" src="" alt="Product Image">
                     <button class="nav-btn prev">&#10094;</button>
                     <button class="nav-btn next">&#10095;</button>
-                    <div class="keyboard-nav-hint">Use ← → arrow keys to navigate</div>
                 </div>
                 <div class="thumbnail-container"></div>
             </div>
-            <div class="modal-info">
-                <h2 id="modalTitle"></h2>
-                <p id="modalDescription"></p>
-                <p id="modalPrice"></p>
-            </div>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+            <p id="modalPrice" class="price"></p>
         </div>
     </div>
 
-    <!-- Add this before main.js -->
     <script src="products.js"></script>
     <script src="main.js"></script>
 </body>
-</html> 
+</html>

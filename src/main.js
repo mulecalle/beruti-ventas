@@ -1,6 +1,16 @@
 let currentProduct = null;
 let currentImageIndex = 0;
 
+function handleProductClick(productId) {
+    const product = window.productsList.find(p => p.id === productId);
+    if (product) {
+        // Update URL without reloading the page
+        const newUrl = `${window.location.pathname}?product=${productId}`;
+        window.history.pushState({ productId }, '', newUrl);
+        openModal(product);
+    }
+}
+
 function openModal(product) {
     currentProduct = product;
     currentImageIndex = 0;
@@ -48,6 +58,30 @@ function openModal(product) {
     modal.style.display = 'block';
 }
 
+function closeModal() {
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.style.display = 'none';
+        // Update URL without the product parameter
+        window.history.pushState({}, '', window.location.pathname);
+        currentProduct = null;
+        currentImageIndex = 0;
+    }
+}
+
+function changeImage(index) {
+    if (!currentProduct || !currentProduct.gallery) return;
+    
+    currentImageIndex = index;
+    const mainImage = document.getElementById('modalMainImage');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    
+    mainImage.src = currentProduct.gallery[index];
+    thumbnails.forEach((thumb, i) => {
+        thumb.classList.toggle('active', i === index);
+    });
+}
+
 function navigateImage(direction) {
     if (!currentProduct || !currentProduct.gallery || currentProduct.gallery.length <= 1) return;
     
@@ -55,32 +89,19 @@ function navigateImage(direction) {
     changeImage(newIndex);
 }
 
-function changeImage(index) {
-    if (!currentProduct || !currentProduct.gallery || !currentProduct.gallery[index]) return;
-    
-    currentImageIndex = index;
-    const mainImage = document.getElementById('modalMainImage');
-    mainImage.src = currentProduct.gallery[index];
-    
-    // Update active thumbnail
-    document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === index);
-    });
-}
-
-function handleProductClick(productId) {
-    const product = window.productsList.find(p => p.id === productId);
-    if (product) {
-        openModal(product);
-    }
-}
-
-function closeModal() {
-    document.getElementById('productModal').style.display = 'none';
-}
-
 // Initialize everything when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Check for product ID in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product');
+    
+    if (productId) {
+        const product = window.productsList.find(p => p.id === parseInt(productId));
+        if (product) {
+            openModal(product);
+        }
+    }
+
     const galleryGrid = document.querySelector('.gallery-grid');
     galleryGrid.innerHTML = window.productsList.map(product => `
         <div class="gallery-item" onclick="handleProductClick(${product.id})">
@@ -92,21 +113,30 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
     `).join('');
-    
+
     // Set up modal close handlers
-    const closeBtn = document.querySelector('.close');
-    if (closeBtn) {
-        closeBtn.onclick = closeModal;
-        closeBtn.addEventListener('click', closeModal);
+    const closeButton = document.querySelector('.close');
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
     }
 
-    // Close with ESC key and handle keyboard navigation
+    // Close modal when clicking outside
+    const modal = document.getElementById('productModal');
+    if (modal) {
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    }
+
+    // Handle keyboard events
     document.addEventListener('keydown', (event) => {
         const modal = document.getElementById('productModal');
         if (modal && modal.style.display === 'block') {
             switch(event.key) {
                 case 'Escape':
-                    modal.style.display = 'none';
+                    closeModal();
                     break;
                 case 'ArrowLeft':
                     navigateImage(-1);
@@ -118,18 +148,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Close by clicking outside
-    window.addEventListener('click', (event) => {
-        const modal = document.getElementById('productModal');
-        if (event.target === modal) {
-            modal.style.display = 'none';
+    // Add click handlers for navigation buttons
+    const prevButton = document.querySelector('.nav-btn.prev');
+    const nextButton = document.querySelector('.nav-btn.next');
+    
+    if (prevButton) {
+        prevButton.addEventListener('click', () => navigateImage(-1));
+    }
+    if (nextButton) {
+        nextButton.addEventListener('click', () => navigateImage(1));
+    }
+});
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('product');
+    
+    if (productId) {
+        const product = window.productsList.find(p => p.id === parseInt(productId));
+        if (product) {
+            openModal(product);
         }
-    });
-
-    // Set up navigation buttons
-    document.querySelector('.prev').onclick = () => navigateImage(-1);
-    document.querySelector('.next').onclick = () => navigateImage(1);
-
-    // Add transition style to the main image
-    document.querySelector('.main-image img').style.transition = 'opacity 0.15s ease-in-out';
+    } else {
+        closeModal();
+    }
 }); 
