@@ -81,27 +81,18 @@ function closeModal() {
 
 // Initialize everything when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetch products
-    fetch('/api/products')
-        .then(response => response.json())
-        .then(products => {
-            const galleryGrid = document.querySelector('.gallery-grid');
-            galleryGrid.innerHTML = products.map(product => `
-                <div class="gallery-item" onclick="handleProductClick(${product.id})">
-                    <img src="${product.imageUrl}" alt="${product.name}">
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <p>${product.description}</p>
-                        <p class="price">$${product.price.toFixed(2)}</p>
-                    </div>
-                </div>
-            `).join('');
-
-            // Store products in window for access
-            window.productsList = products;
-        })
-        .catch(error => console.error('Error loading products:', error));
-
+    const galleryGrid = document.querySelector('.gallery-grid');
+    galleryGrid.innerHTML = window.productsList.map(product => `
+        <div class="gallery-item" onclick="handleProductClick(${product.id})">
+            <img src="${product.imageUrl}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p class="price">$${product.price.toFixed(2)}</p>
+            </div>
+        </div>
+    `).join('');
+    
     // Set up modal close handlers
     const closeBtn = document.querySelector('.close');
     if (closeBtn) {
