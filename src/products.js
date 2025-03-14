@@ -1,61 +1,97 @@
 const products = [
     {
         id: 1,
-        name: "Modern Office Chair",
-        description: "Ergonomic design with lumbar support",
-        price: 199.99,
-        imageUrl: "./images/chair-1/thumbnail.jpg",
-        category: "Furniture",
+        name: "Rack de TV",
+        description: "Rack de pared para TV",
+        extendedDescription: "Rack de pared para TV",
+        imageUrl: "./images/rack/rack.jpg",
+        category: "Art",
         gallery: [
-            "./images/chair-1/1.jpg",
-            "./images/chair-1/2.jpg",
-            "./images/chair-1/3.jpg"
-        ]
+            "./images/rack/rack.jpg",
+            "./images/rack/rack_1.jpg",
+            "./images/rack/rack_2.jpg"
+        ],
+        dimensions: {
+            length: 129,
+            width: 8.5,
+            height: 129
+        }
     },
     {
         id: 2,
-        name: "Vintage Table Lamp",
-        description: "Classic design with brass finish",
-        price: 89.99,
-        imageUrl: "./images/lamp-1/thumbnail.jpg",
-        category: "Lighting",
-        gallery: []
+        name: "Mueble Escritorio",
+        description: "Escritorio con estantes",
+        extendedDescription: "Escritorio con estantes\nPuertas con cierra facil\nBuen espacio de guardado\nEstantes moviles",
+        imageUrl: "./images/mueble/mueble.jpg",
+        category: "Art",
+        gallery: [
+            "./images/mueble/mueble.jpg",
+            "./images/mueble/mueble_1.jpg",
+            "./images/mueble/mueble_2.jpg",
+            "./images/mueble/mueble_3.jpg",
+            "./images/mueble/mueble_4.jpg",
+            "./images/mueble/mueble_5.jpg",
+            "./images/mueble/mueble_6.jpg",
+            "./images/mueble/mueble_7.jpg"
+        ],
+        dimensions: {
+            length: 106,
+            width: 60,
+            height: 240
+        }
     },
     {
         id: 3,
-        name: "Ceramic Vase Set",
-        description: "Set of 3 handcrafted vases",
-        price: 149.99,
-        imageUrl: "./images/vase-set-1/thumbnail.jpg",
-        category: "Decor",
-        gallery: []
+        name: "Sillon",
+        description: "Sillon dos cuerpos con apoya pies",
+        extendedDescription: "Apoya pies 70x70x40",
+        imageUrl: "./images/sillon/sillon.jpg",
+        category: "Art",
+        gallery: [
+            "./images/sillon/sillon.jpg",
+            "./images/sillon/sillon_1.jpg",
+            "./images/sillon/sillon_2.jpg",
+            "./images/sillon/sillon_3.jpg",
+            "./images/sillon/sillon_4.jpg",
+            "./images/sillon/sillon_5.jpg",
+            "./images/sillon/sillon_6.jpg",
+            "./images/sillon/sillon_7.jpg"
+        ],
+        dimensions: {
+            length: 208,
+            width: 96,
+            height: 72
+        }
     },
     {
         id: 4,
-        name: "Leather Sofa",
-        description: "Premium Italian leather, 3-seater",
-        price: 999.99,
-        imageUrl: "./images/sofa-1/thumbnail.jpg",
-        category: "Furniture",
-        gallery: []
+        name: "Lampara de techo",
+        description: "7 lamparas LED",
+        extendedDescription: "",
+        imageUrl: "./images/lampara/lampara.jpg",
+        category: "Art",
+        gallery: [
+            "./images/lampara/lampara.jpg",
+            "./images/lampara/lampara_1.jpg",
+            "./images/lampara/lampara_2.jpg",
+            "./images/lampara/lampara_3.jpg",
+            "./images/lampara/lampara_4.jpg"
+        ]
     },
     {
         id: 5,
-        name: "Wall Art Canvas",
-        description: "Abstract design, 40x60 inches",
-        price: 299.99,
-        imageUrl: "./images/canvas-1/thumbnail.jpg",
+        name: "Lampara colgante de techo",
+        description: "7 lamparas LED",
+        extendedDescription: "Soporta varias combinaciones",
+        imageUrl: "./images/colgante/colgante.jpg",
         category: "Art",
-        gallery: []
-    },
-    {
-        id: 6,
-        name: "Smart Coffee Maker",
-        description: "WiFi-enabled, 12-cup capacity",
-        price: 179.99,
-        imageUrl: "./images/coffee-maker-1/thumbnail.jpg",
-        category: "Appliances",
-        gallery: []
+        gallery: [
+            "./images/colgante/colgante.jpg",
+            "./images/colgante/colgante_1.jpg",
+            "./images/colgante/colgante_2.jpg",
+            "./images/colgante/colgante_3.jpg",
+            "./images/colgante/colgante_4.jpg"
+        ]
     }
 ];
 

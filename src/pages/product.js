@@ -1,6 +1,16 @@
 export default function ProductPage(product) {
     if (!product) return '<h1>Product not found</h1>';
     
+    // Format dimensions if available
+    const dimensionsHtml = product.dimensions 
+        ? `<div class="product-dimensions">
+             <h3>Medidas (cm):</h3>
+             <p>Length: ${product.dimensions.length} cm</p>
+             <p>Width: ${product.dimensions.width} cm</p>
+             <p>Height: ${product.dimensions.height} cm</p>
+           </div>`
+        : '';
+    
     return `
         <div class="product-detail">
             <div class="modal-gallery">
@@ -22,10 +32,50 @@ export default function ProductPage(product) {
             </div>
             <div class="product-info">
                 <h2>${product.name}</h2>
-                <p>${product.description}</p>
-                <p class="price">$${product.price.toFixed(2)}</p>
+                <p class="product-description">${product.description}</p>
+                ${product.extendedDescription ? 
+                    `<p class="product-extended-description">${product.extendedDescription}</p>` 
+                    : ''}
+                ${dimensionsHtml}
                 <button onclick="window.history.back()">Back to Gallery</button>
             </div>
         </div>
     `;
+}
+
+function renderProductDetails(product) {
+    const productDetailContainer = document.querySelector('#product-detail-container');
+    
+    // Create size selection options
+    const sizeOptions = product.sizes 
+        ? product.sizes.map(size => `<option value="${size}">${size}</option>`).join('') 
+        : '<option value="">No sizes available</option>';
+    
+    productDetailContainer.innerHTML = `
+        <div class="product-detail">
+            <img src="${product.image}" alt="${product.name}" class="product-detail-image">
+            <div class="product-info">
+                <h2 class="product-detail-name">${product.name}</h2>
+                <p class="product-detail-price">$${product.price.toFixed(2)}</p>
+                <p class="product-detail-description">${product.description}</p>
+                
+                <div class="product-size-selection">
+                    <label for="size-select">Select Size:</label>
+                    <select id="size-select" name="size">
+                        ${sizeOptions}
+                    </select>
+                </div>
+                
+                <button id="add-to-cart" class="add-to-cart-btn">Add to Cart</button>
+            </div>
+        </div>
+    `;
+    
+    // Add event listener for the Add to Cart button
+    document.getElementById('add-to-cart').addEventListener('click', () => {
+        const selectedSize = document.getElementById('size-select').value;
+        // Add to cart logic with the selected size
+        console.log(`Added ${product.name} with size ${selectedSize} to cart`);
+        // Implement your cart functionality here
+    });
 } 

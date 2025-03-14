@@ -19,15 +19,36 @@ function openModal(product) {
     const mainImage = document.getElementById('modalMainImage');
     const title = document.getElementById('modalTitle');
     const description = document.getElementById('modalDescription');
-    const price = document.getElementById('modalPrice');
+    const modalContent = document.querySelector('.modal-content');
     const thumbnailContainer = document.querySelector('.thumbnail-container');
     const navButtons = document.querySelectorAll('.nav-btn');
     const keyboardHint = document.querySelector('.keyboard-nav-hint');
+    const productInfo = document.querySelector('.modal-product-info');
     
     // Set main content
     title.textContent = product.name;
-    description.textContent = product.description;
-    price.textContent = `$${product.price.toFixed(2)}`;
+    description.textContent = product.extendedDescription || product.description;
+    
+    // Add dimensions after description
+    if (product.dimensions) {
+        const dimensionsHtml = `
+            <div class="product-dimensions">
+                <h3>Medidas (cm):</h3>
+                <p>Length: ${product.dimensions.length} cm</p>
+                <p>Width: ${product.dimensions.width} cm</p>
+                <p>Height: ${product.dimensions.height} cm</p>
+            </div>
+        `;
+        
+        // Remove any existing dimensions div
+        const existingDimensions = modalContent.querySelector('.product-dimensions');
+        if (existingDimensions) {
+            existingDimensions.remove();
+        }
+        
+        // Insert dimensions after description
+        description.insertAdjacentHTML('afterend', dimensionsHtml);
+    }
     
     // Check if gallery exists and has images
     if (product.gallery && product.gallery.length > 0) {
@@ -39,14 +60,11 @@ function openModal(product) {
         if (keyboardHint) keyboardHint.style.display = 'block';
         
         // Create thumbnails
-        thumbnailContainer.innerHTML = product.gallery
-            .map((img, index) => `
-                <img src="${img}" 
-                     class="thumbnail ${index === 0 ? 'active' : ''}" 
-                     onclick="changeImage(${index})"
-                     alt="Thumbnail ${index + 1}"
-                >
-            `).join('');
+        const galleryHtml = product.gallery.map((img, i) => `
+            <img src="${img}" class="thumbnail ${i === 0 ? 'active' : ''}" 
+                 onclick="changeImage(${i})" alt="Thumbnail ${i + 1}">
+        `).join('');
+        thumbnailContainer.innerHTML = galleryHtml;
     } else {
         // Use single imageUrl and hide navigation elements
         mainImage.src = product.imageUrl;
@@ -103,16 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const galleryGrid = document.querySelector('.gallery-grid');
-    galleryGrid.innerHTML = window.productsList.map(product => `
-        <div class="gallery-item" onclick="handleProductClick(${product.id})">
-            <img src="${product.imageUrl}" alt="${product.name}">
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p class="price">$${product.price.toFixed(2)}</p>
+    galleryGrid.innerHTML = window.productsList.map(product => {
+        return `
+            <div class="gallery-item" onclick="handleProductClick(${product.id})">
+                <img src="${product.imageUrl}" alt="${product.name}">
+                <div class="product-info">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 
     // Set up modal close handlers
     const closeButton = document.querySelector('.close');
