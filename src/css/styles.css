@@ -349,6 +349,20 @@ body {
     padding-top: 15px;
     border-top: 1px solid #eee;
     color: #666;
+    line-height: 1.8;
+    padding-left: 5px;
+}
+
+/* Add some spacing between bullet points */
+.product-extended-description::first-line {
+    line-height: 2;
+}
+
+/* Ensure bullets are properly aligned in the modal */
+#modalDescription {
+    white-space: pre-line;
+    line-height: 1.8;
+    padding-left: 5px;
 }
 
 /* Regular description should wrap normally */

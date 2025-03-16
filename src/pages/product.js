@@ -16,6 +16,14 @@ export default function ProductPage(product) {
            </div>`
         : '';
     
+    // Format extended description with bullets
+    const formattedExtendedDescription = product.extendedDescription 
+        ? product.extendedDescription
+            .split('\n')
+            .map(line => line.trim() ? `• ${line}` : line)
+            .join('\n')
+        : '';
+    
     // Create reference section if available (optional)
     const referenceHtml = product.reference && product.reference.trim() !== ''
         ? `<div class="product-reference">
@@ -49,8 +57,8 @@ export default function ProductPage(product) {
                 <h2>${product.name}</h2>
                 <p class="product-price">${formattedPrice}</p>
                 <p class="product-description">${product.description}</p>
-                ${product.extendedDescription ? 
-                    `<p class="product-extended-description">${product.extendedDescription}</p>` 
+                ${formattedExtendedDescription ? 
+                    `<p class="product-extended-description">${formattedExtendedDescription}</p>` 
                     : ''}
                 ${referenceHtml}
                 ${dimensionsHtml}

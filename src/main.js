@@ -27,7 +27,16 @@ function openModal(product) {
     
     // Set main content
     title.textContent = product.name;
-    description.textContent = product.extendedDescription || product.description;
+    
+    // Format extended description with bullets
+    const formattedDescription = product.extendedDescription 
+        ? product.extendedDescription
+            .split('\n')
+            .map(line => line.trim() ? `• ${line}` : line)
+            .join('\n')
+        : product.description;
+    
+    description.textContent = formattedDescription;
     
     // Format price with thousand separators
     const formattedPrice = product.price ? 
