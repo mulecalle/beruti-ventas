@@ -29,14 +29,31 @@ function openModal(product) {
     title.textContent = product.name;
     description.textContent = product.extendedDescription || product.description;
     
+    // Format price with thousand separators
+    const formattedPrice = product.price ? 
+        `$${product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}` : 
+        'Precio a consultar';
+    
+    // Add price after title
+    const priceHtml = `<p class="product-price">${formattedPrice}</p>`;
+    
+    // Remove any existing price element
+    const existingPrice = modalContent.querySelector('.product-price');
+    if (existingPrice) {
+        existingPrice.remove();
+    }
+    
+    // Insert price after title
+    title.insertAdjacentHTML('afterend', priceHtml);
+    
     // Add dimensions after description
     if (product.dimensions) {
         const dimensionsHtml = `
             <div class="product-dimensions">
                 <h3>Medidas (cm):</h3>
-                <p>Length: ${product.dimensions.length} cm</p>
-                <p>Width: ${product.dimensions.width} cm</p>
-                <p>Height: ${product.dimensions.height} cm</p>
+                <p>Largo: ${product.dimensions.length} cm</p>
+                <p>Profundidad: ${product.dimensions.width} cm</p>
+                <p>Alto: ${product.dimensions.height} cm</p>
             </div>
         `;
         
@@ -48,6 +65,32 @@ function openModal(product) {
         
         // Insert dimensions after description
         description.insertAdjacentHTML('afterend', dimensionsHtml);
+    }
+    
+    // Add reference link if available (optional)
+    if (product.reference && product.reference.trim() !== '') {
+        const referenceHtml = `
+            <div class="product-reference">
+                <h3>Referencia:</h3>
+                <a href="${product.reference}" target="_blank" rel="noopener noreferrer">
+                    <span class="reference-icon">&#128279;</span> Ver publicacion
+                </a>
+            </div>
+        `;
+        
+        // Remove any existing reference div
+        const existingReference = modalContent.querySelector('.product-reference');
+        if (existingReference) {
+            existingReference.remove();
+        }
+        
+        // Insert reference before dimensions or after description if no dimensions
+        const dimensionsDiv = modalContent.querySelector('.product-dimensions');
+        if (dimensionsDiv) {
+            dimensionsDiv.insertAdjacentHTML('beforebegin', referenceHtml);
+        } else {
+            description.insertAdjacentHTML('afterend', referenceHtml);
+        }
     }
     
     // Check if gallery exists and has images

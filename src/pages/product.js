@@ -1,13 +1,28 @@
 export default function ProductPage(product) {
     if (!product) return '<h1>Product not found</h1>';
     
+    // Format price with thousand separators
+    const formattedPrice = product.price ? 
+        `$${product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}` : 
+        'Precio a consultar';
+    
     // Format dimensions if available
     const dimensionsHtml = product.dimensions 
         ? `<div class="product-dimensions">
              <h3>Medidas (cm):</h3>
-             <p>Length: ${product.dimensions.length} cm</p>
-             <p>Width: ${product.dimensions.width} cm</p>
-             <p>Height: ${product.dimensions.height} cm</p>
+             <p>Largo: ${product.dimensions.length} cm</p>
+             <p>Profundidad: ${product.dimensions.width} cm</p>
+             <p>Alto: ${product.dimensions.height} cm</p>
+           </div>`
+        : '';
+    
+    // Create reference section if available (optional)
+    const referenceHtml = product.reference && product.reference.trim() !== ''
+        ? `<div class="product-reference">
+             <h3>Referencia:</h3>
+             <a href="${product.reference}" target="_blank" rel="noopener noreferrer">
+               <span class="reference-icon">&#128279;</span> Ver publicacion
+             </a>
            </div>`
         : '';
     
@@ -32,10 +47,12 @@ export default function ProductPage(product) {
             </div>
             <div class="product-info">
                 <h2>${product.name}</h2>
+                <p class="product-price">${formattedPrice}</p>
                 <p class="product-description">${product.description}</p>
                 ${product.extendedDescription ? 
                     `<p class="product-extended-description">${product.extendedDescription}</p>` 
                     : ''}
+                ${referenceHtml}
                 ${dimensionsHtml}
                 <button onclick="window.history.back()">Back to Gallery</button>
             </div>
