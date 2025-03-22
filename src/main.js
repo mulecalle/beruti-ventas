@@ -59,7 +59,7 @@ function openModal(product) {
     if (product.dimensions) {
         const dimensionsHtml = `
             <div class="product-dimensions">
-                <h3>Medidas (cm):</h3>
+                <h3>Medidas:</h3>
                 <p>Largo: ${product.dimensions.length} cm</p>
                 <p>Profundidad: ${product.dimensions.width} cm</p>
                 <p>Alto: ${product.dimensions.height} cm</p>

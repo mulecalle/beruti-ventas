@@ -5,7 +5,6 @@ export default function HomePage() {
         </section>
         <div class="main-content">
             <section class="description-section">
-                <p>Todas las medidas estan en largo x profundidad x alto(cm)</p>
             </section>
             <section class="gallery-section">
                 <div class="gallery-grid"></div>

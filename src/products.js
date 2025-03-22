@@ -14,7 +14,7 @@ const products = [
         ],
         dimensions: {
             length: 130,
-            width: 8.5,
+            width: 10,
             height: 130
         }
     },

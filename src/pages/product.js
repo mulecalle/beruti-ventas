@@ -9,7 +9,7 @@ export default function ProductPage(product) {
     // Format dimensions if available
     const dimensionsHtml = product.dimensions 
         ? `<div class="product-dimensions">
-             <h3>Medidas (cm):</h3>
+             <h3>Medidas:</h3>
              <p>Largo: ${product.dimensions.length} cm</p>
              <p>Profundidad: ${product.dimensions.width} cm</p>
              <p>Alto: ${product.dimensions.height} cm</p>
